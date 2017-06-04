@@ -48,6 +48,9 @@ ResponsiveAnalogRead analogVert(vertPin, sleep, snap);
 int calibrationTime = 10000;
 int sampTime = 0;
 
+bool state = false;
+int buttonState = 0;
+
 void setup() {
   Serial.begin(9600);
   // set sleep threshold
@@ -85,9 +88,20 @@ void setup() {
   // signal the end of the calibration period
   digitalWrite(13, LOW);
 
+  pinMode(2, INPUT);
+  
+
 }
 
 void loop() {
+
+  buttonState = digitalRead(2);
+  if (buttonState == HIGH) {
+    state = !state;
+  }
+
+  if (state) {
+    
   // read sensors
   analogHoriz.update();
   analogVert.update();
@@ -109,4 +123,5 @@ void loop() {
 
   
   delay(sampTime);
+  }
 }
